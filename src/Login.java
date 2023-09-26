@@ -1,3 +1,4 @@
+import java.text.Normalizer;
 import java.util.Scanner;
 public class Login {
 
@@ -29,30 +30,35 @@ public class Login {
 		}
 		else
 		{
-			System.out.println(generateEmail(fname, lname, companyDom));
-			System.out.println(generateUserName(fname, lname));
+			System.out.println(generateEmail(normalizeInput(fname),normalizeInput(lname),normalizeInput(companyDom)));
+			System.out.println(generateUserName(normalizeInput(fname),normalizeInput(lname)));
 		}
-		
 	}
 	
-	//Method which generates email from user input values of first name, last name & company domain address.
-	//Email is  converted to lower case.
+	//Input is normalized (ä=a,ö=o etc.) with java.text.Normalizer and converted to lower case.
+	//This is used to modify user input for generateEmail & generateUserName methods.
+	
+	public static String normalizeInput (String input)
+	{
+		return Normalizer.normalize(input, Normalizer.Form.NFD)
+				   .replaceAll("[^\\p{ASCII}]", "")
+				   .toLowerCase();
+	}
+	
+	//This method generates email from user input values of first name, last name & company domain address.
 	
 	public static String generateEmail (String fname, String lname, String companyDom)
 	{ 
 		String email = fname +(".")+ lname +("@")+ companyDom;
-		email = email.toLowerCase();
 		return email;
 	}
 	
 	//Method which generates user name from user input.
 	//User name is made from first name (first 4 letters) & last name (last 4 letters).
-	//User name is also converted to lower case.
 	
 	public static String generateUserName (String fname, String lname)
 	{
 		String userName = fname.substring(0,4)+ lname.substring(lname.length()-4);
-		userName = userName.toLowerCase();
 		return userName;
 	}
 
